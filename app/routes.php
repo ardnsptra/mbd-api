@@ -410,14 +410,16 @@ return function (App $app) {
     //======================================================================================================
 
     // delete data
-    $app->delete('/countries/{id}', function (Request $request, Response $response, $args) {
+    // kabupaten
+    $app->delete('/kabupaten/{id}', function (Request $request, Response $response, $args) {
         $currentId = $args['id'];
         $db = $this->get(PDO::class);
-
+    
         try {
-            $query = $db->prepare('DELETE FROM countries WHERE id = ?');
-            $query->execute([$currentId]);
-
+            $query = $db->prepare('CALL Delete_Kabupaten_ByID(:id)');
+            $query->bindParam(':id', $currentId, PDO::PARAM_INT);
+            $query->execute();
+    
             if ($query->rowCount() === 0) {
                 $response = $response->withStatus(404);
                 $response->getBody()->write(json_encode(
@@ -428,7 +430,7 @@ return function (App $app) {
             } else {
                 $response->getBody()->write(json_encode(
                     [
-                        'message' => 'country dengan id ' . $currentId . ' dihapus dari database'
+                        'message' => 'Data dengan ID ' . $currentId . ' telah dihapus dari database'
                     ]
                 ));
             }
@@ -440,7 +442,151 @@ return function (App $app) {
                 ]
             ));
         }
+    
+        return $response->withHeader("Content-Type", "application/json");
+    });
 
+    // TENAGA KESEHATAN
+    $app->delete('/tenagakesehatan/{id}', function (Request $request, Response $response, $args) {
+        $currentId = $args['id'];
+        $db = $this->get(PDO::class);
+    
+        try {
+            $query = $db->prepare('CALL Delete_TenagaKesehatan_ByID(:id)');
+            $query->bindParam(':id', $currentId, PDO::PARAM_INT);
+            $query->execute();
+    
+            if ($query->rowCount() === 0) {
+                $response = $response->withStatus(404);
+                $response->getBody()->write(json_encode(
+                    [
+                        'message' => 'Data tidak ditemukan'
+                    ]
+                ));
+            } else {
+                $response->getBody()->write(json_encode(
+                    [
+                        'message' => 'Data dengan ID ' . $currentId . ' telah dihapus dari database'
+                    ]
+                ));
+            }
+        } catch (PDOException $e) {
+            $response = $response->withStatus(500);
+            $response->getBody()->write(json_encode(
+                [
+                    'message' => 'Database error ' . $e->getMessage()
+                ]
+            ));
+        }
+    
+        return $response->withHeader("Content-Type", "application/json");
+    });
+
+    // non tenaga kesehatan
+    $app->delete('/nontenagakesehatan/{id}', function (Request $request, Response $response, $args) {
+        $currentId = $args['id'];
+        $db = $this->get(PDO::class);
+    
+        try {
+            $query = $db->prepare('CALL Delete_NonTenagaKesehatan_ByID(:id)');
+            $query->bindParam(':id', $currentId, PDO::PARAM_INT);
+            $query->execute();
+    
+            if ($query->rowCount() === 0) {
+                $response = $response->withStatus(404);
+                $response->getBody()->write(json_encode(
+                    [
+                        'message' => 'Data tidak ditemukan'
+                    ]
+                ));
+            } else {
+                $response->getBody()->write(json_encode(
+                    [
+                        'message' => 'Data dengan ID ' . $currentId . ' telah dihapus dari database'
+                    ]
+                ));
+            }
+        } catch (PDOException $e) {
+            $response = $response->withStatus(500);
+            $response->getBody()->write(json_encode(
+                [
+                    'message' => 'Database error ' . $e->getMessage()
+                ]
+            ));
+        }
+    
+        return $response->withHeader("Content-Type", "application/json");
+    });
+
+    // jumlah
+    $app->delete('/jumlah/{id}', function (Request $request, Response $response, $args) {
+        $currentId = $args['id'];
+        $db = $this->get(PDO::class);
+    
+        try {
+            $query = $db->prepare('CALL Delete_Jumlah_ByID(:id)');
+            $query->bindParam(':id', $currentId, PDO::PARAM_INT);
+            $query->execute();
+    
+            if ($query->rowCount() === 0) {
+                $response = $response->withStatus(404);
+                $response->getBody()->write(json_encode(
+                    [
+                        'message' => 'Data tidak ditemukan'
+                    ]
+                ));
+            } else {
+                $response->getBody()->write(json_encode(
+                    [
+                        'message' => 'Data dengan ID ' . $currentId . ' telah dihapus dari database'
+                    ]
+                ));
+            }
+        } catch (PDOException $e) {
+            $response = $response->withStatus(500);
+            $response->getBody()->write(json_encode(
+                [
+                    'message' => 'Database error ' . $e->getMessage()
+                ]
+            ));
+        }
+    
+        return $response->withHeader("Content-Type", "application/json");
+    });
+
+    // persen  tenaga kesehatan
+    $app->delete('/persentenagakesehatan/{id}', function (Request $request, Response $response, $args) {
+        $currentId = $args['id'];
+        $db = $this->get(PDO::class);
+    
+        try {
+            $query = $db->prepare('CALL Delete_PersenTenagaKesehatan_ByID(:id)');
+            $query->bindParam(':id', $currentId, PDO::PARAM_INT);
+            $query->execute();
+    
+            if ($query->rowCount() === 0) {
+                $response = $response->withStatus(404);
+                $response->getBody()->write(json_encode(
+                    [
+                        'message' => 'Data tidak ditemukan'
+                    ]
+                ));
+            } else {
+                $response->getBody()->write(json_encode(
+                    [
+                        'message' => 'Data dengan ID ' . $currentId . ' telah dihapus dari database'
+                    ]
+                ));
+            }
+        } catch (PDOException $e) {
+            $response = $response->withStatus(500);
+            $response->getBody()->write(json_encode(
+                [
+                    'message' => 'Database error ' . $e->getMessage()
+                ]
+            ));
+        }
+    
         return $response->withHeader("Content-Type", "application/json");
     });
 };
